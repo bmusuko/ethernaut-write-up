@@ -6,22 +6,15 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+  // get instance contract
+  const instance = await ethers.getContractAt("Instance", "0x3881184d74B3d59714C34f3A95911864f0905845");
 
-  // We get the contract to deploy
-
-  const instance = await ethers.getContractAt("Instance", "0x229145aFB36f5798686D4b1fE9abE14bd89CeD09");
+  // get password
   const password = await instance.password();
 
+  // authenticate
   const solveTx = await instance.authenticate(password);
   solveTx.wait(1);
-
-  // console.log("Greeter deployed to:", greeter.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
